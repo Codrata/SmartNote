@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //getting firebase objects
         mStorageReference = FirebaseStorage.getInstance().getReference();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Notes");
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference(Const.DATABASE_PATH_UPLOADS);
 
         //getting the views
         textViewStatus = (TextView) findViewById(R.id.textViewStatus);
@@ -110,8 +110,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         progressBar.setVisibility(View.GONE);
                         textViewStatus.setText("File Uploaded Successfully");
 
-                        Upload upload = new Upload(editTextFilename.getText().toString(), sRef.getDownloadUrl().toString());
-                        mDatabaseReference.child(mDatabaseReference.push().getKey()).setValue(upload);
+                        sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Upload upload = new Upload(editTextFilename.getText().toString(), uri.toString());
+                                mDatabaseReference.child(mDatabaseReference.push().getKey()).setValue(upload);
+                            }
+                        });
+
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

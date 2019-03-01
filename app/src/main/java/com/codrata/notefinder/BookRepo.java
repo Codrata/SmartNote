@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,7 +23,7 @@ import java.util.List;
 public class BookRepo extends AppCompatActivity {
 
     //the listview
-    ListView listView;
+    GridView listView;
 
     //database reference to get uploads data
     DatabaseReference mDatabaseReference;
@@ -36,7 +37,7 @@ public class BookRepo extends AppCompatActivity {
         setContentView(R.layout.activity_book_repo);
 
         uploadList = new ArrayList<>();
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (GridView) findViewById(R.id.listView);
 
 
         //adding a clicklistener on listview
