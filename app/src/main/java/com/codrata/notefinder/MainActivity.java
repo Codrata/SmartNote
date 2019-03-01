@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //getting firebase objects
         mStorageReference = FirebaseStorage.getInstance().getReference();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference(Const.DATABASE_PATH_UPLOADS);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Notes");
 
         //getting the views
         textViewStatus = (TextView) findViewById(R.id.textViewStatus);
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //so we are not explaining it
     private void uploadFile(Uri data) {
         progressBar.setVisibility(View.VISIBLE);
-        StorageReference sRef = mStorageReference.child(Const.STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".pdf");
+        final StorageReference sRef = mStorageReference.child(Const.STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".pdf");
         sRef.putFile(data)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @SuppressWarnings("VisibleForTests")
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         progressBar.setVisibility(View.GONE);
                         textViewStatus.setText("File Uploaded Successfully");
 
-                        Upload upload = new Upload(editTextFilename.getText().toString(), taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+                        Upload upload = new Upload(editTextFilename.getText().toString(), sRef.getDownloadUrl().toString());
                         mDatabaseReference.child(mDatabaseReference.push().getKey()).setValue(upload);
                     }
                 })
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getPDF();
                 break;
             case R.id.textViewUploads:
-                startActivity(new Intent(this, Upload.class));
+                startActivity(new Intent(this, BookRepo.class));
                 break;
         }
     }
