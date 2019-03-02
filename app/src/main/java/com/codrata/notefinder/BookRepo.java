@@ -5,11 +5,10 @@ import android.os.Bundle;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,7 +19,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookRepo extends AppCompatActivity {
+public class BookRepo extends AppCompatActivity implements NotesListAdapter.ItemClickListener {
+    NotesListAdapter adapter;
 
     //the listview
     GridView listView;
@@ -36,23 +36,15 @@ public class BookRepo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_repo);
 
+        final ArrayList<String[]> bookNames = new ArrayList<>();
+
         uploadList = new ArrayList<>();
-        listView = (GridView) findViewById(R.id.listView);
 
+        final RecyclerView recyclerView = findViewById(R.id.rvAnimals);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new NotesListAdapter(this, R.layout.list_model, uploadList);
+        adapter.setClickListener(this);
 
-        //adding a clicklistener on listview
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //getting the upload
-                Upload upload = uploadList.get(i);
-
-                //Opening the upload file in browser using the upload url 
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(upload.getUrl()));
-                startActivity(intent);
-            }
-        });
 
 
         //getting the database reference
@@ -74,8 +66,8 @@ public class BookRepo extends AppCompatActivity {
                 }
 
                 //displaying it to list
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, uploads);
-                listView.setAdapter(adapter);
+                bookNames.add(uploads);
+                recyclerView.setAdapter(adapter);
             }
 
             @Override
@@ -86,4 +78,14 @@ public class BookRepo extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemClick(View view, int position) {
+        Upload upload = uploadList.get(position);
+
+        //Opening the upload file in browser using the upload url
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(upload.getUrl()));
+        startActivity(intent);
+
+    }
 }
