@@ -5,13 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.ViewHolder> {
+public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.ViewHolder> implements Filterable {
 
     private List<Upload> mData;
+    private List<Upload> mDataFull;
+    private List<RepObject> mDataBooks;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
@@ -19,9 +24,11 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
     NotesListAdapter(Context context, int list_model, List<Upload> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        mDataFull = new ArrayList<>(data);
     }
 
-    // inflates the row layout from xml when needed
+
+    // inflates the row layout from menu when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.list_model, parent, false);
@@ -39,6 +46,44 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
     public int getItemCount() {
         return mData.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return mNewFilter;
+    }
+
+    private Filter mNewFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Upload> filteredList = new ArrayList<>();
+
+            if ((constraint == null || constraint.length() == 0)){
+                filteredList.addAll(mDataFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Upload item : mData){
+                    if (item.getName().toLowerCase().contains(filterPattern)){
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            mData.clear();
+            mData.addAll((List) results.values);
+            notifyDataSetChanged();
+
+        }
+    };
 
 
     // stores and recycles views as they are scrolled off screen

@@ -8,8 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -38,12 +41,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //the firebase objects for storage and database
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
+    private BottomNavigationView buttomNavBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            }
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+        buttomNavBar = findViewById(R.id.navigationMain);
+        buttomNavBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+
+                    case R.id.nav_upload:
+
+                        return true;
+                    case R.id.nav_download:
+                        Intent downloadAc = new Intent(getApplicationContext(), BookRepo.class);
+                        startActivity(downloadAc);
+
+                        return true;
+                }
+                return false;
+            }
+        });
 
         //getting firebase objects
         mStorageReference = FirebaseStorage.getInstance().getReference();
@@ -61,12 +92,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //this function will get the pdf from the storage
     private void getPDF() {
+
         //for greater than lolipop versions we need the permissions asked on runtime
         //so if the permission is not available user will go to the screen to allow storage permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Intent intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS,
                     Uri.parse("package:" + getPackageName()));
             startActivity(intent);
             return;
@@ -77,6 +109,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.setType("application/pdf");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_PDF_CODE);
+    }
+
+    private void uploadPDF(){
+
     }
 
 
@@ -138,7 +174,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_upload:

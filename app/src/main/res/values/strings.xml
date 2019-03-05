@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">NoteFinder</string>
     <string name="note_s_name">Note\'s Name</string>
+    <string name="note_1">Note 1</string>
+    <string name="title_activity_bottom__nav">Bottom_Nav</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="get_school_notes_from_top_students">Get School Notes from Top Students</string>
 </resources>
