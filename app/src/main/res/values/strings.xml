@@ -7,4 +7,16 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="get_school_notes_from_top_students">Get School Notes from Top Students</string>
+    <string-array name="faculties_array_list">
+        <item>FACULTY OF TECHNOLOGY</item>
+        <item>FACULTY OF SCIENCE</item>
+        <item>FACULTY OF EDUCATION</item>
+        <item>FACULTY OF ARTS</item>
+        <item>FACULTY OF PHARMACY</item>
+        <item>COLLEGE OF HEALTH SCIENCES</item>
+        <item>FACULTY OF LAW</item>
+        <item>FACULTY OF SOCIAL SCIENCES</item>
+        <item>FACULTY OF ADMINISTRATION</item>
+    </string-array>
+
 </resources>

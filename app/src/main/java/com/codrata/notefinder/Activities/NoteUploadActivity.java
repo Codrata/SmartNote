@@ -22,8 +22,10 @@ import android.widget.Toast;
 import com.codrata.notefinder.Const;
 import com.codrata.notefinder.R;
 import com.codrata.notefinder.NoteConst.Upload;
+import com.codrata.notefinder.SignUpActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -35,6 +37,7 @@ public class NoteUploadActivity extends AppCompatActivity implements View.OnClic
 
     //this is the pic pdf code used in file chooser
     final static int PICK_PDF_CODE = 2342;
+    FirebaseAuth mAuth;
 
     //these are the views
     TextView textViewStatus;
@@ -50,6 +53,8 @@ public class NoteUploadActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
+
 
 
         //Checks and prompts the user to activate Storage Read and Write Permission
@@ -177,7 +182,9 @@ public class NoteUploadActivity extends AppCompatActivity implements View.OnClic
                 getPDF();
                 break;
             case R.id.textViewUploads:
-                startActivity(new Intent(this, NoteListsActivity.class));
+                mAuth.signOut();
+                startActivity(new Intent(this, SignUpActivity.class));
+                finish();
                 break;
         }
     }
