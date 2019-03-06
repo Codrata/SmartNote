@@ -1,4 +1,4 @@
-package com.codrata.notefinder;
+package com.codrata.notefinder.NoteConst;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.codrata.notefinder.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +18,11 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
 
     private List<Upload> mData;
     private List<Upload> mDataFull;
-    private List<RepObject> mDataBooks;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    NotesListAdapter(Context context, int list_model, List<Upload> data) {
+    public NotesListAdapter(Context context, int list_model, List<Upload> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         mDataFull = new ArrayList<>(data);
@@ -108,7 +109,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.View
     }
 
     // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 

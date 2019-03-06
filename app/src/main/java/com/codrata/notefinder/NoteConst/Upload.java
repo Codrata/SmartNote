@@ -1,4 +1,4 @@
-package com.codrata.notefinder;
+package com.codrata.notefinder.NoteConst;
 
 public class Upload {
 

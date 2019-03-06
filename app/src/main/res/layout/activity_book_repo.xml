@@ -7,7 +7,7 @@
     android:background="@color/viewBg"
     android:layout_gravity="center"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".BookRepo"
+    tools:context=".Activities.NoteListsActivity"
     >
 
     <android.support.v7.widget.RecyclerView

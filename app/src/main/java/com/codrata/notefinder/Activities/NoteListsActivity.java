@@ -1,4 +1,4 @@
-package com.codrata.notefinder;
+package com.codrata.notefinder.Activities;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -16,6 +16,11 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.GridView;
 import android.widget.SearchView;
+
+import com.codrata.notefinder.Const;
+import com.codrata.notefinder.NoteConst.NotesListAdapter;
+import com.codrata.notefinder.R;
+import com.codrata.notefinder.NoteConst.Upload;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,7 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookRepo extends AppCompatActivity implements NotesListAdapter.ItemClickListener {
+public class NoteListsActivity extends AppCompatActivity implements NotesListAdapter.ItemClickListener {
     NotesListAdapter adapter;
 
     //the listview
@@ -63,7 +68,7 @@ public class BookRepo extends AppCompatActivity implements NotesListAdapter.Item
 
                         return true;
                     case R.id.nav_upload_repo:
-                        Intent downloadAc = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent downloadAc = new Intent(getApplicationContext(), NoteUploadActivity.class);
                         startActivity(downloadAc);
                         return true;
                 }

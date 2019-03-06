@@ -1,4 +1,4 @@
-package com.codrata.notefinder;
+package com.codrata.notefinder.Activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -19,6 +19,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codrata.notefinder.Const;
+import com.codrata.notefinder.R;
+import com.codrata.notefinder.NoteConst.Upload;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +31,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class NoteUploadActivity extends AppCompatActivity implements View.OnClickListener {
 
     //this is the pic pdf code used in file chooser
     final static int PICK_PDF_CODE = 2342;
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //Checks and prompts the user to activate Storage Read and Write Permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
@@ -57,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
+
+        // This configures the bottom navigation bar
         buttomNavBar = findViewById(R.id.navigationMain);
         buttomNavBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -67,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         return true;
                     case R.id.nav_download:
-                        Intent downloadAc = new Intent(getApplicationContext(), BookRepo.class);
+                        Intent downloadAc = new Intent(getApplicationContext(), NoteListsActivity.class);
                         startActivity(downloadAc);
 
                         return true;
@@ -93,16 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //this function will get the pdf from the storage
     private void getPDF() {
 
-        //for greater than lolipop versions we need the permissions asked on runtime
-        //so if the permission is not available user will go to the screen to allow storage permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS,
-                    Uri.parse("package:" + getPackageName()));
-            startActivity(intent);
-            return;
-        }
 
         //creating an intent for file chooser
         Intent intent = new Intent();
@@ -119,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //when the user choses the file
+        //when the user chooses the file
         if (requestCode == PICK_PDF_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             //if a file is selected
             if (data.getData() != null) {
@@ -133,11 +130,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     //this method is uploading the file
-    //the code is same as the previous tutorial
-    //so we are not explaining it
     private void uploadFile(Uri data) {
         progressBar.setVisibility(View.VISIBLE);
-        final StorageReference sRef = mStorageReference.child(Const.STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".pdf");
+        // uses System.currentTimeMillis() to create a unique file name
+        final StorageReference sRef = mStorageReference.child(Const.STORAGE_PATH_UPLOADS + "NoteFinderAppNote" + System.currentTimeMillis() + ".pdf");
         sRef.putFile(data)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @SuppressWarnings("VisibleForTests")
@@ -174,13 +170,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_upload:
                 getPDF();
                 break;
             case R.id.textViewUploads:
-                startActivity(new Intent(this, BookRepo.class));
+                startActivity(new Intent(this, NoteListsActivity.class));
                 break;
         }
     }
