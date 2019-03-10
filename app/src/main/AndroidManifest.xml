@@ -14,8 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.NoteListsActivity" />
-        <activity android:name=".Activities.NoteUploadActivity" />
+        <activity android:name=".Fragments"></activity>
+        <activity android:name=".Activities.ListFragment" />
+        <activity android:name=".Activities.UploadFragment" />
         <activity
             android:name=".SignUpActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">

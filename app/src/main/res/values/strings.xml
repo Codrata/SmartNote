@@ -7,6 +7,11 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="get_school_notes_from_top_students">Get School Notes from Top Students</string>
+    <string name="select_faculty">Select Faculty</string>
+    <string name="downloads">Downloads</string>
+    <string name="repository">Repository</string>
+    <string name="upload_note">Upload Note</string>
+    <string name="profile">Profile</string>
     <string-array name="faculties_array_list">
         <item>FACULTY OF TECHNOLOGY</item>
         <item>FACULTY OF SCIENCE</item>

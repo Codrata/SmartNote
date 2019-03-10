@@ -6,14 +6,17 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,7 +36,32 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-public class NoteUploadActivity extends AppCompatActivity implements View.OnClickListener {
+public class HomeFragment extends Fragment {
+    final static int PICK_PDF_CODE = 2342;
+    FirebaseAuth mAuth;
+
+    //these are the views
+    TextView textViewStatus;
+    EditText editTextFilename;
+    ProgressBar progressBar;
+
+    //the firebase objects for storage and database
+    StorageReference mStorageReference;
+    DatabaseReference mDatabaseReference;
+    private BottomNavigationView buttomNavBar;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //just change the fragment_dashboard
+        //with the fragment you want to inflate
+        //like if the class is HomeFragment it should have R.layout.home_fragment
+        //if it is DashboardFragment it should have R.layout.fragment_dashboard
+        return inflater.inflate(R.layout.activity_main, null);
+    }
+}
+
+public class UploadFragment extends AppCompatActivity implements View.OnClickListener {
 
     //this is the pic pdf code used in file chooser
     final static int PICK_PDF_CODE = 2342;
@@ -79,7 +107,7 @@ public class NoteUploadActivity extends AppCompatActivity implements View.OnClic
 
                         return true;
                     case R.id.nav_download:
-                        Intent downloadAc = new Intent(getApplicationContext(), NoteListsActivity.class);
+                        Intent downloadAc = new Intent(getApplicationContext(), ListFragment.class);
                         startActivity(downloadAc);
 
                         return true;

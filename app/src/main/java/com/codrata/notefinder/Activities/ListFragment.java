@@ -30,7 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoteListsActivity extends AppCompatActivity implements NotesListAdapter.ItemClickListener {
+public class ListFragment extends AppCompatActivity implements NotesListAdapter.ItemClickListener {
     NotesListAdapter adapter;
 
     //the listview
@@ -55,7 +55,9 @@ public class NoteListsActivity extends AppCompatActivity implements NotesListAda
 
         final RecyclerView recyclerView = findViewById(R.id.repo_recycler_view);
         int numberOfColumns = 2;
-        recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, numberOfColumns);
+        gridLayoutManager.setReverseLayout(true);
+        recyclerView.setLayoutManager(gridLayoutManager);
         adapter = new NotesListAdapter(this, R.layout.list_model, uploadList);
         adapter.setClickListener(this);
         buttomNavBarRepo = findViewById(R.id.navigationRepo);
@@ -68,7 +70,7 @@ public class NoteListsActivity extends AppCompatActivity implements NotesListAda
 
                         return true;
                     case R.id.nav_upload_repo:
-                        Intent downloadAc = new Intent(getApplicationContext(), NoteUploadActivity.class);
+                        Intent downloadAc = new Intent(getApplicationContext(), UploadFragment.class);
                         startActivity(downloadAc);
                         return true;
                 }
@@ -91,7 +93,7 @@ public class NoteListsActivity extends AppCompatActivity implements NotesListAda
 
                 String[] uploads = new String[uploadList.size()];
 
-                for (int i = 0; i < uploads.length; i++) {
+                for (int i = uploads.length - 1; i >= 0; i--) {
                     uploads[i] = uploadList.get(i).getName();
                 }
 
@@ -151,6 +153,12 @@ public class NoteListsActivity extends AppCompatActivity implements NotesListAda
                     }
                 });
                 return false;
+            }
+        });
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
             }
         });
 
