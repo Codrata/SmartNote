@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,19 +37,27 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-public class HomeFragment extends Fragment {
+import static android.app.Activity.RESULT_OK;
+
+public class UploadFragment extends Fragment {
     final static int PICK_PDF_CODE = 2342;
     FirebaseAuth mAuth;
 
     //these are the views
     TextView textViewStatus;
     EditText editTextFilename;
+    View view;
     ProgressBar progressBar;
+    Button mBtnUpload;
 
     //the firebase objects for storage and database
     StorageReference mStorageReference;
     DatabaseReference mDatabaseReference;
     private BottomNavigationView buttomNavBar;
+
+    public UploadFragment() {
+
+    }
 
     @Nullable
     @Override
@@ -57,80 +66,26 @@ public class HomeFragment extends Fragment {
         //with the fragment you want to inflate
         //like if the class is HomeFragment it should have R.layout.home_fragment
         //if it is DashboardFragment it should have R.layout.fragment_dashboard
-        return inflater.inflate(R.layout.activity_main, null);
-    }
-}
-
-public class UploadFragment extends AppCompatActivity implements View.OnClickListener {
-
-    //this is the pic pdf code used in file chooser
-    final static int PICK_PDF_CODE = 2342;
-    FirebaseAuth mAuth;
-
-    //these are the views
-    TextView textViewStatus;
-    EditText editTextFilename;
-    ProgressBar progressBar;
-
-    //the firebase objects for storage and database
-    StorageReference mStorageReference;
-    DatabaseReference mDatabaseReference;
-    private BottomNavigationView buttomNavBar;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mAuth = FirebaseAuth.getInstance();
-
-
-
-        //Checks and prompts the user to activate Storage Read and Write Permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-            }
-        }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        }
-
-        // This configures the bottom navigation bar
-        buttomNavBar = findViewById(R.id.navigationMain);
-        buttomNavBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-
-                    case R.id.nav_upload:
-
-                        return true;
-                    case R.id.nav_download:
-                        Intent downloadAc = new Intent(getApplicationContext(), ListFragment.class);
-                        startActivity(downloadAc);
-
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        //getting firebase objects
+        view = inflater.inflate(R.layout.activity_main, container, false);
         mStorageReference = FirebaseStorage.getInstance().getReference();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference(Const.DATABASE_PATH_UPLOADS);
 
         //getting the views
-        textViewStatus = (TextView) findViewById(R.id.textViewStatus);
-        editTextFilename = (EditText) findViewById(R.id.editTextFileName);
-        progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        textViewStatus = (TextView) view.findViewById(R.id.textViewStatus);
+        editTextFilename = (EditText) view.findViewById(R.id.editTextFileName);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+        mBtnUpload = view.findViewById(R.id.button_upload);
 
-        //attaching listeners to views
-        findViewById(R.id.button_upload).setOnClickListener(this);
-        findViewById(R.id.textViewUploads).setOnClickListener(this);
+        mBtnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPDF();
+            }
+        });
+
+
+        return view;
     }
-
-    //this function will get the pdf from the storage
     private void getPDF() {
 
 
@@ -147,7 +102,7 @@ public class UploadFragment extends AppCompatActivity implements View.OnClickLis
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //when the user chooses the file
         if (requestCode == PICK_PDF_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
@@ -156,7 +111,7 @@ public class UploadFragment extends AppCompatActivity implements View.OnClickLis
                 //uploading the file
                 uploadFile(data.getData());
             } else {
-                Toast.makeText(this, "No file chosen", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "No file chosen", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -189,7 +144,7 @@ public class UploadFragment extends AppCompatActivity implements View.OnClickLis
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -203,18 +158,5 @@ public class UploadFragment extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.button_upload:
-                getPDF();
-                break;
-            case R.id.textViewUploads:
-                mAuth.signOut();
-                startActivity(new Intent(this, SignUpActivity.class));
-                finish();
-                break;
-        }
-    }
 
 }

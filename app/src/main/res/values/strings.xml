@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NoteFinder</string>
+    <string name="app_name">SmartNote</string>
     <string name="note_s_name">Note\'s Name</string>
     <string name="note_1">Note 1</string>
     <string name="title_activity_bottom__nav">Bottom_Nav</string>
@@ -12,6 +12,16 @@
     <string name="repository">Repository</string>
     <string name="upload_note">Upload Note</string>
     <string name="profile">Profile</string>
+    <string name="sign_in">Sign In</string>
+    <string name="click_here_to_sign_in">Click here to sign in..</string>
+    <string name="click_here_to_register">Click here to register..</string>
+    <string name="my_notefinder_profile">My SmartNote Profile</string>
+    <string name="faculty">Faculty</string>
+    <string name="my_repo">My Repo</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone number</string>
+    <string name="name">NAME</string>
+    <string name="sign_up">Sign Up</string>
     <string-array name="faculties_array_list">
         <item>FACULTY OF TECHNOLOGY</item>
         <item>FACULTY OF SCIENCE</item>

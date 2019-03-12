@@ -14,9 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Fragments"></activity>
+        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".Activities.ProfileFragment" />
+        <activity android:name=".Activities.DownloadedFragment" />
+        <activity android:name=".Fragments" />
         <activity android:name=".Activities.ListFragment" />
-        <activity android:name=".Activities.UploadFragment" />
+        <activity
+            android:name=".Activities.UploadFragment"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".SignUpActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
