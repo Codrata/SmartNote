@@ -22,6 +22,7 @@
     <string name="phone_number">Phone number</string>
     <string name="name">NAME</string>
     <string name="sign_up">Sign Up</string>
+    <string name="sign_in_">SIGN IN</string>
     <string-array name="faculties_array_list">
         <item>FACULTY OF TECHNOLOGY</item>
         <item>FACULTY OF SCIENCE</item>
